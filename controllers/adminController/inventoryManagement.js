@@ -1,5 +1,6 @@
 const { success, error } = require("../../service_response/userApiResponse");
 const UnitProduct = require("../../models/adminModels/unitProduct");
+const csv = require("csvtojson")
 
 exports.addProduct = async (req, res) => {
   const {
@@ -26,12 +27,6 @@ exports.addProduct = async (req, res) => {
       return res
         .status(201)
         .json(error("Please enter all details", res.statusCode));
-    }
-    const isAdded = await UnitProduct.findOne({ unitName });
-    if (isAdded) {
-      return res
-        .status(201)
-        .json(error("Product is already Registered", res.statusCode));
     }
     const newProduct = new UnitProduct({
       unitName: unitName,
@@ -65,6 +60,7 @@ exports.addProduct = async (req, res) => {
   }
 };
 
+// Update prduct
 exports.updateProduct = async (req, res) => {
   const {
     unitName,
@@ -84,7 +80,7 @@ exports.updateProduct = async (req, res) => {
         .status(201)
         .json(error("Please provide product name", res.statusCode));
     }
-    const updated = await UnitProduct.findOne({ unitName: unitName });
+    const updated = await UnitProduct.findById(req.params._id);
     if (description) updated.description = description;
     if (category) updated.category = category;
     if (subCategory) updated.subCategory = subCategory;
@@ -191,3 +187,21 @@ exports.productStatus = async (req, res) => {
 //     res.status(401).json(error("Error in Deletion", res.statusCode));
 //   }
 // };
+
+
+// Import Inventory
+exports.importInventory = async(req,res)=>{
+  if(req.files.length ==0||!req.files){
+    return res.status(201).json(error("Please upload Inventory File",res.statusCode))
+  }
+  try {
+    const inventoryFile = req.files[0].path;
+    const jsonArray = await csv().fromFile(inventoryFile);
+    const inventory = await UnitProduct.insertMany(jsonArray)
+    // console.log(inventory);
+    res.status(201).json(success(res.statusCode,"Imported Successfully",inventory))
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(error("Error in Importing Inventory",res.statusCode))
+  }
+}

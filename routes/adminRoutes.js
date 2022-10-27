@@ -54,12 +54,19 @@ const {
   allProducts,
   deleteProduct,
   productStatus,
+  importInventory,
 } = require("../controllers/adminController/inventoryManagement");
 const {
   addCategory,
   editCategory,
   deleteCategory,
+  categoryStatus,
+  addSubCategory,
+  editSubCategory,
 } = require("../controllers/adminController/CategoryAndSubCategoryController");
+
+const { addBrand, editBrand } = require("../controllers/adminController/brandController");
+
 router.post("/register", createFilePath, upload.any(), register);
 
 router.post("/login", login);
@@ -142,11 +149,11 @@ router.post(
   editPrivacyPolicy
 );
 
-router.get("/cms/tAndC",tokenAdminAuthorisation, tAndC);
+router.get("/cms/tAndC", tokenAdminAuthorisation, tAndC);
 
-router.get("/cms/privacyPolicy",tokenAdminAuthorisation, privacyPolicy);
+router.get("/cms/privacyPolicy", tokenAdminAuthorisation, privacyPolicy);
 
-router.get("/cms/aboutUs",tokenAdminAuthorisation, aboutUs);
+router.get("/cms/aboutUs", tokenAdminAuthorisation, aboutUs);
 
 // Inventory management
 
@@ -170,7 +177,14 @@ router.post(
   productStatus
 );
 
-router.post("/inventory/allProducts", allProducts);
+router.post("/inventory/allProducts", tokenAdminAuthorisation, allProducts);
+
+router.post(
+  "/inventory/importInventory",
+  tokenAdminAuthorisation,
+  CSVFileUpload.any(),
+  importInventory
+);
 
 // Category and Sub_Category Management
 
@@ -178,15 +192,18 @@ router.post("/category/addCategory", upload.any(), addCategory);
 
 router.post("/category/editCategory/:_id", upload.any(), editCategory);
 
-router.post("/category/deleteCategory/:_id",  deleteCategory);
+// router.post("/category/deleteCategory/:_id", deleteCategory);
 
+// router.post("/category/categoryStatus/:_id", categoryStatus);
 
+router.post("/subCategory/addSubCategory", upload.any(), addSubCategory);
 
+router.post("/subCategory/editSubCategory/:_id", upload.any(), editSubCategory);
 
+// Brands Management
 
+router.post("/brands/addBrand", upload.any(), addBrand);
 
-
-
-
+router.post("/brands/editBrand/:_id", upload.any(), editBrand);
 
 module.exports = router;

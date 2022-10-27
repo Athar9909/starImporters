@@ -4,7 +4,7 @@ const unitProductSchema = mongoose.Schema(
   {
     unitName: {
       type: String,
-      required: true,
+      // required: true,
     },
     description: {
       type: String,
@@ -21,25 +21,23 @@ const unitProductSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    flavour: {
-      type: String,
-      required: true,
-    },
-    productType: {
-      type: String,
-      required: true,
-    },
     quantity: {
       type: Number,
       required: true,
     },
     productImage: {
       type: String,
-      // required: true
     },
     flavourImage: {
       type: String,
-      // required: true
+    },
+    flavour: {
+      type: String,
+      // required: true,
+    },
+    productType: {
+      type: String,
+      // required: true,
     },
     status: {
       type: Boolean,

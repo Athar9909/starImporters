@@ -1,11 +1,11 @@
 const mongoose = require("mongoose")
 
 const categorySchema = mongoose.Schema({
-    name:{
+    categoryName:{
         type:String,
         required:true
     },
-    image:{
+    categoryImage:{
         type:String
     },
     status:{
@@ -18,11 +18,15 @@ const Category  = mongoose.model("Category",categorySchema)
 
 
 const subCategorySchema = mongoose.Schema({
-    name:{
+    categoryName:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    },
+    subCategoryName:{
         type:String,
         required:true
     },
-    image:{
+    subCategoryImage:{
         type:String
     },
     status:{
