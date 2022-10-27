@@ -63,9 +63,15 @@ const {
   categoryStatus,
   addSubCategory,
   editSubCategory,
+  getCategories,
+  getSubCategories,
 } = require("../controllers/adminController/CategoryAndSubCategoryController");
 
-const { addBrand, editBrand } = require("../controllers/adminController/brandController");
+const {
+  addBrand,
+  editBrand,
+  getBrands,
+} = require("../controllers/adminController/brandController");
 
 router.post("/register", createFilePath, upload.any(), register);
 
@@ -188,22 +194,62 @@ router.post(
 
 // Category and Sub_Category Management
 
-router.post("/category/addCategory", upload.any(), addCategory);
+router.post(
+  "/category/addCategory",
+  upload.any(),
+  tokenAdminAuthorisation,
+  addCategory
+);
 
-router.post("/category/editCategory/:_id", upload.any(), editCategory);
+router.post(
+  "/category/editCategory/:_id",
+  upload.any(),
+  tokenAdminAuthorisation,
+  editCategory
+);
+
+router.get("/category/getCategories", tokenAdminAuthorisation, getCategories);
 
 // router.post("/category/deleteCategory/:_id", deleteCategory);
 
 // router.post("/category/categoryStatus/:_id", categoryStatus);
 
-router.post("/subCategory/addSubCategory", upload.any(), addSubCategory);
+router.post(
+  "/subCategory/addSubCategory",
+  upload.any(),
+  tokenAdminAuthorisation,
+  addSubCategory
+);
 
-router.post("/subCategory/editSubCategory/:_id", upload.any(), editSubCategory);
+router.post(
+  "/subCategory/editSubCategory/:_id",
+  upload.any(),
+  tokenAdminAuthorisation,
+  editSubCategory
+);
+
+router.get(
+  "/subCategory/getSubCategories",
+  tokenAdminAuthorisation,
+  getSubCategories
+);
 
 // Brands Management
 
-router.post("/brands/addBrand", upload.any(), addBrand);
+router.post(
+  "/brands/addBrand",
+  upload.any(),
+  tokenAdminAuthorisation,
+  addBrand
+);
 
-router.post("/brands/editBrand/:_id", upload.any(), editBrand);
+router.post(
+  "/brands/editBrand/:_id",
+  upload.any(),
+  tokenAdminAuthorisation,
+  editBrand
+);
+
+router.get("/brands/getBrands", tokenAdminAuthorisation, getBrands);
 
 module.exports = router;

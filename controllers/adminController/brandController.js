@@ -1,5 +1,4 @@
 const Brand = require("../../models/adminModels/brandSchema");
-const { param } = require("../../routes/adminRoutes");
 const { error, success } = require("../../service_response/userApiResponse");
 
 // Add Brand
@@ -43,10 +42,24 @@ exports.editBrand = async (req, res) => {
         req.files[0].filename
       }`;
     }
-    await edit.save()
-    res.status(201).json(success(res.statusCode,"Modified Successfullt",edit))
+    await edit.save();
+    res
+      .status(201)
+      .json(success(res.statusCode, "Modified Successfullt", edit));
   } catch (err) {
     console.log(err);
     res.status(201).json(error("Error in modifying", res.statusCode));
   }
 };
+
+
+// Get all brands
+exports.getBrands = async(req,res)=>{
+    try {
+        const brands = await Brand.find()
+        res.status(201).json(success(res.statusCode,"Brands",brands))
+    } catch (err) {
+        console.log(err);
+        res.status(401).json(error("Error in fetching brands",res.statusCode))
+    }
+}
