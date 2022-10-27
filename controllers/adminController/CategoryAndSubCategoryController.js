@@ -58,19 +58,16 @@ exports.editCategory = async (req, res) => {
   }
 };
 
-
 // Get Categories
-exports.getCategories = async(req,res)=>{
+exports.getCategories = async (req, res) => {
   try {
-    const categories = await Category.find()
-    res.status(201).json(success(res.statusCode,"Categories",categories))
+    const categories = await Category.find();
+    res.status(201).json(success(res.statusCode, "Categories", categories));
   } catch (err) {
     console.log(err);
-    res.status(401).json(error("Error in fetching categories",res.statusCode))
+    res.status(401).json(error("Error in fetching categories", res.statusCode));
   }
-}
-
-
+};
 
 // // Delete Category
 // exports.deleteCategory = async (req, res) => {
@@ -166,14 +163,19 @@ exports.editSubCategory = async (req, res) => {
   }
 };
 
-
 // Get sub Categories
-exports.getSubCategories = async(req,res)=>{
+exports.getSubCategories = async (req, res) => {
   try {
-    const subCategories = await Sub_Category.find()
-    res.status(201).json(success(res.statusCode,"Sub Categories",subCategories))
+    const subCategories = await Sub_Category.find().populate("categoryName");
+    // const nnn = subCategories._id
+    // console.log();
+    res
+      .status(201)
+      .json(success(res.statusCode, "Sub Categories", subCategories));
   } catch (err) {
     console.log(err);
-    res.status(401).json(error("Error in fetching Sub categories",res.statusCode))
+    res
+      .status(401)
+      .json(error("Error in fetching Sub categories", res.statusCode));
   }
-}
+};

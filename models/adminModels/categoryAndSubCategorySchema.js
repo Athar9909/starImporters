@@ -20,6 +20,7 @@ const Category  = mongoose.model("Category",categorySchema)
 const subCategorySchema = mongoose.Schema({
     categoryName:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:"Category",
         required:true
     },
     subCategoryName:{
