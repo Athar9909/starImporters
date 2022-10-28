@@ -42,14 +42,13 @@ exports.register = async (req, res) => {
         .status(201)
         .json(error("Email is already Registered", res.statusCode));
     }
+    const arr = req.files[0].path.split("\\");
+      const adminProfile = `${arr[1]}\\${arr[2]}`;
     const newAdminUser = new NewStarAdmin({
       firstName: firstName,
       lastName: lastName,
       email: email,
-      adminProfile: `${req.files[0].destination.replace(
-        "./public/images",
-        ""
-      )}/${req.files[0].filename}`,
+      adminProfile: adminProfile,
       // adminProfile:req.files[0].path,
       password: password,
     });
@@ -236,9 +235,9 @@ exports.editProfile = async (req, res) => {
       admin.lastName = lastName;
     }
     if (req.files.length) {
-      admin.adminProfile = `${req.files[0].destination.replace(
-        "/public/images"
-      )}/${req.files[0].filename}`;
+      const arr = req.files[0].path.split("\\");
+      const adminProfile = `${arr[1]}\\${arr[2]}`;
+      admin.adminProfile = adminProfile
     }
     await admin.save();
     res

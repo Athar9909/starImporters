@@ -39,7 +39,7 @@ exports.allUsersList = async (req, res) => {
   }
 };
 
-// Counting of Pending Approved and Rejected Users -> Admin
+//! Counting of Pending Approved and Rejected Users -> Admin
 exports.usersCount = async (req, res) => {
   try {
     const users = await NewStarUser.aggregate([
@@ -54,7 +54,7 @@ exports.usersCount = async (req, res) => {
   }
 };
 
-// Get a User by Object _id -> admin
+//! Get a User by Object _id -> admin
 exports.getUser = async (req, res) => {
   try {
     const user = await NewStarUser.findById(req.params._id);
@@ -67,7 +67,7 @@ exports.getUser = async (req, res) => {
   }
 };
 
-// Admin authorised user
+//! Admin authorised user
 exports.adminAuthorisedUser = async (req, res) => {
   try {
     const findUser = await NewStarUser.findByIdAndUpdate(
@@ -88,7 +88,7 @@ exports.adminAuthorisedUser = async (req, res) => {
   }
 };
 
-// Reject user due incomplete registration details -> Admin
+//! Reject user due incomplete registration details -> Admin
 exports.rejectUser = async (req, res) => {
   // const {} = req.body
   try {
@@ -114,7 +114,7 @@ exports.rejectUser = async (req, res) => {
   }
 };
 
-// Suspend or Resume User -> Admin
+//! Suspend or Resume User -> Admin
 exports.userStatus = async (req, res) => {
   try {
     const user = await NewStarUser.findById(req.params._id).select("status");
@@ -138,7 +138,7 @@ exports.userStatus = async (req, res) => {
   }
 };
 
-// import Users from CSV file -> Admin
+//! import Users from CSV file -> Admin
 exports.importUsers = async (req, res) => {
   // console.log(req.files)
   if (!req.files) {
@@ -205,7 +205,7 @@ exports.importUsers = async (req, res) => {
   }
 };
 
-// Adding a Single User -> Admin
+//! Adding a Single User -> Admin
 exports.addUser = async (req, res) => {
   try {
     // console.log(req.files)
@@ -262,22 +262,34 @@ exports.addUser = async (req, res) => {
     });
     for (let i = 0; i < req.files.length; i++) {
       if (req.files[i].fieldname == "profileImage") {
-        newuser.profileImage = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const profileImage = `${arr[1]}\\${arr[2]}`;
+        newuser.profileImage = profileImage;
       }
       if (req.files[i].fieldname == "federalTaxId") {
-        newuser.federalTaxId = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const federalTaxId = `${arr[1]}\\${arr[2]}`;
+        newuser.federalTaxId = federalTaxId;
       }
       if (req.files[i].fieldname == "businessLicense") {
-        newuser.businessLicense = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const businessLicense = `${arr[1]}\\${arr[2]}`;
+        newuser.businessLicense = businessLicense;
       }
       if (req.files[i].fieldname == "salesTaxId") {
-        newuser.salesTaxId = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const salesTaxId = `${arr[1]}\\${arr[2]}`;
+        newuser.salesTaxId = salesTaxId;
       }
       if (req.files[i].fieldname == "accountOwnerId") {
-        newuser.accountOwnerId = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const accountOwnerId = `${arr[1]}\\${arr[2]}`;
+        newuser.accountOwnerId = accountOwnerId;
       }
       if (req.files[i].fieldname == "tobaccoLicence") {
-        newuser.tobaccoLicence = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const tobaccoLicence = `${arr[1]}\\${arr[2]}`;
+        newuser.tobaccoLicence = tobaccoLicence;
       }
     }
     if (!newuser.profileImage) {
@@ -384,34 +396,34 @@ exports.editUserProfile = async (req, res) => {
     }
     for (let i = 0; i < req.files.length; i++) {
       if (req.files[i].fieldname == "profileImage") {
-        editUser.profileImage = `${req.files[i].destination.replace(
-          "./public/images"
-        )}/${req.files[i].filename}`;
+        const arr = req.files[i].path.split("\\");
+        const profileImage = `${arr[1]}\\${arr[2]}`;
+        editUser.profileImage = profileImage;
       }
       if (req.files[i].fieldname == "federalTaxId") {
-        editUser.federalTaxId = `${req.files[i].destination.replace(
-          "./public/images"
-        )}/${req.files[i].filename}`;
+        const arr = req.files[i].path.split("\\");
+        const federalTaxId = `${arr[1]}\\${arr[2]}`;
+        editUser.federalTaxId = federalTaxId;
       }
       if (req.files[i].fieldname == "businessLicense") {
-        editUser.businessLicense = `${req.files[i].destination.replace(
-          "./public/images"
-        )}/${req.files[i].filename}`;
+        const arr = req.files[i].path.split("\\");
+        const businessLicense = `${arr[1]}\\${arr[2]}`;
+        editUser.businessLicense = businessLicense;
       }
       if (req.files[i].fieldname == "salesTaxId") {
-        editUser.salesTaxId = `${req.files[i].destination.replace(
-          "./public/images"
-        )}/${req.files[i].filename}`;
+        const arr = req.files[i].path.split("\\");
+        const salesTaxId = `${arr[1]}\\${arr[2]}`;
+        editUser.salesTaxId = salesTaxId;
       }
       if (req.files[i].fieldname == "accountOwnerId") {
-        editUser.accountOwnerId = `${req.files[i].destination.replace(
-          "./public/images"
-        )}/${req.files[i].filename}`;
+        const arr = req.files[i].path.split("\\");
+        const accountOwnerId = `${arr[1]}\\${arr[2]}`;
+        editUser.accountOwnerId = accountOwnerId;
       }
       if (req.files[i].fieldname == "tobaccoLicence") {
-        editUser.tobaccoLicence = `${req.files[i].destination.replace(
-          "./public/images"
-        )}/${req.files[i].filename}`;
+        const arr = req.files[i].path.split("\\");
+        const tobaccoLicence = `${arr[1]}\\${arr[2]}`;
+        editUser.tobaccoLicence = tobaccoLicence;
       }
     }
     await editUser.save();
@@ -423,5 +435,24 @@ exports.editUserProfile = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(401).json(error("Error while updation", res.statusCode));
+  }
+};
+
+//! Search In user Management
+exports.searchUser = async (req, res) => {
+  try {
+    const { search, type } = req.body;
+    const users = await NewStarUser.aggregate([
+      {
+        $match: {
+          isVerified: type,
+          firstName: { $regex: search, $options: "i" },
+        },
+      },
+    ]);
+    res.status(201).json(success(res.statusCode, "Searched Users", users));
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(error("Error in search", res.statusCode));
   }
 };

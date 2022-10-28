@@ -3,7 +3,6 @@ const NewStarUser = require("../../models/userModels/userRegister");
 const Contact = require("../../models/contact");
 const { success, error } = require("../../service_response/userApiResponse");
 
-
 exports.contact = async (req, res) => {
   const { fullName, email, subject, messageTextArea } = req.body;
   if (!validator.isEmail(email)) {
@@ -34,10 +33,8 @@ exports.home = (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    // console.log(req.body.email);
+    // console.log(req.body);
     // console.log(req.files)
-    // console.log(req.files[1])
-    // console.log(req.file[1])
     const {
       companyName,
       dba,
@@ -73,32 +70,6 @@ exports.register = async (req, res) => {
         .json(error("Email is already registered", res.statusCode));
     }
 
-    const federalTaxId = req.files[0].path;
-    const businessLicense = req.files[1].path;
-    const salesTaxId = req.files[2].path;
-    const accountOwnerId = req.files[3].path;
-    const tobaccoLicence = req.files[4]?.path;
-    if (!federalTaxId) {
-      return res
-        .status(200)
-        .json(error("Please upload federal Tax Id", res.statusCode));
-    }
-    if (!businessLicense) {
-      return res
-        .status(200)
-        .json(error("Please upload business License", res.statusCode));
-    }
-    if (!salesTaxId) {
-      return res
-        .status(200)
-        .json(error("Please upload sales Tax Id", res.statusCode));
-    }
-    if (!accountOwnerId) {
-      return res
-        .status(200)
-        .json(error("Please upload account Owner Id", res.statusCode));
-    }
-
     const password = Math.floor(10000 + Math.random() * 90000);
 
     const newuser = new NewStarUser({
@@ -108,11 +79,6 @@ exports.register = async (req, res) => {
       city: city,
       state: state,
       zipcode: zipcode,
-      // federalTaxId: federalTaxId,
-      // businessLicense: businessLicense,
-      // salesTaxId: salesTaxId,
-      // tobaccoLicence: tobaccoLicence,
-      // accountOwnerId: accountOwnerId,
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -123,19 +89,29 @@ exports.register = async (req, res) => {
     });
     for (let i = 0; i < req.files.length; i++) {
       if (req.files[i].fieldname == "federalTaxId") {
-        newuser.federalTaxId = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const federalTaxId = `${arr[1]}\\${arr[2]}`;
+        newuser.federalTaxId = federalTaxId;
       }
       if (req.files[i].fieldname == "businessLicense") {
-        newuser.businessLicense = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const businessLicense = `${arr[1]}\\${arr[2]}`;
+        newuser.businessLicense = businessLicense;
       }
       if (req.files[i].fieldname == "salesTaxId") {
-        newuser.salesTaxId = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const salesTaxId = `${arr[1]}\\${arr[2]}`;
+        newuser.salesTaxId = salesTaxId;
       }
       if (req.files[i].fieldname == "accountOwnerId") {
-        newuser.accountOwnerId = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const accountOwnerId = `${arr[1]}\\${arr[2]}`;
+        newuser.accountOwnerId = accountOwnerId;
       }
       if (req.files[i].fieldname == "tobaccoLicence") {
-        newuser.tobaccoLicence = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const tobaccoLicence = `${arr[1]}\\${arr[2]}`;
+        newuser.tobaccoLicence = tobaccoLicence;
       }
     }
     if (!newuser.federalTaxId) {
@@ -373,10 +349,12 @@ exports.editProfile = async (req, res) => {
     if (addressLine) {
       user.addressLine = addressLine;
     }
-    if (req.files.length) {
-      profile = `${req.files[0].destination.replace("/public/images")}/${
-        req.files[0].filename
-      }`;
+    if (req.files.length > 0) {
+      if (req.files[0].fieldname == "profileImage") {
+        const arr = req.files[0].path.split("\\");
+        const profileImage = `${arr[1]}\\${arr[2]}`;
+        user.profileImage = profileImage;
+      }
     }
     await user.save();
     res

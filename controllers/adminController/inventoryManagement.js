@@ -1,6 +1,6 @@
 const { success, error } = require("../../service_response/userApiResponse");
 const UnitProduct = require("../../models/adminModels/unitProduct");
-const csv = require("csvtojson")
+const csv = require("csvtojson");
 
 exports.addProduct = async (req, res) => {
   const {
@@ -11,7 +11,7 @@ exports.addProduct = async (req, res) => {
     description,
     quantity,
     brand,
-    productType
+    productType,
   } = req.body;
   try {
     if (
@@ -36,15 +36,19 @@ exports.addProduct = async (req, res) => {
       flavour: flavour,
       quantity: quantity,
       brand: brand,
-      productType:productType
+      productType: productType,
     });
 
     for (let i = 0; i < req.files.length; i++) {
       if (req.files[i].fieldname == "productImage") {
-        newProduct.productImage = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const productImage = `${arr[1]}\\${arr[2]}`;
+        newProduct.productImage = productImage;
       }
       if (req.files[i].fieldname == "flavourImage") {
-        newProduct.flavourImage = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const flavourImage = `${arr[1]}\\${arr[2]}`;
+        newProduct.flavourImage = flavourImage;
       }
     }
     await newProduct.save();
@@ -70,7 +74,7 @@ exports.updateProduct = async (req, res) => {
     brand,
     flavour,
     quantity,
-    productType
+    productType,
   } = req.body;
   //   console.log(req.body);
   // console.log(req.files);
@@ -91,10 +95,14 @@ exports.updateProduct = async (req, res) => {
 
     for (let i = 0; i < req.files.length; i++) {
       if (req.files[i].fieldname == "productImage") {
-        updated.productImage = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const productImage = `${arr[1]}\\${arr[2]}`;
+        updated.productImage =productImage
       }
       if (req.files[i].fieldname == "flavourImage") {
-        updated.flavourImage = req.files[i].path;
+        const arr = req.files[i].path.split("\\");
+        const flavourImage = `${arr[1]}\\${arr[2]}`;
+        updated.flavourImage = flavourImage;
       }
     }
 
@@ -115,7 +123,6 @@ exports.updateProduct = async (req, res) => {
       );
   }
 };
-
 
 // Get all Products
 exports.allProducts = async (req, res) => {
@@ -144,7 +151,6 @@ exports.allProducts = async (req, res) => {
     res.status(401).json(error("Error in finding Document", res.statusCode));
   }
 };
-
 
 // Enable or disable product
 exports.productStatus = async (req, res) => {
@@ -188,20 +194,23 @@ exports.productStatus = async (req, res) => {
 //   }
 // };
 
-
 // Import Inventory
-exports.importInventory = async(req,res)=>{
-  if(req.files.length ==0||!req.files){
-    return res.status(201).json(error("Please upload Inventory File",res.statusCode))
+exports.importInventory = async (req, res) => {
+  if (req.files.length == 0 || !req.files) {
+    return res
+      .status(201)
+      .json(error("Please upload Inventory File", res.statusCode));
   }
   try {
     const inventoryFile = req.files[0].path;
     const jsonArray = await csv().fromFile(inventoryFile);
-    const inventory = await UnitProduct.insertMany(jsonArray)
+    const inventory = await UnitProduct.insertMany(jsonArray);
     // console.log(inventory);
-    res.status(201).json(success(res.statusCode,"Imported Successfully",inventory))
+    res
+      .status(201)
+      .json(success(res.statusCode, "Imported Successfully", inventory));
   } catch (err) {
     console.log(err);
-    res.status(401).json(error("Error in Importing Inventory",res.statusCode))
+    res.status(401).json(error("Error in Importing Inventory", res.statusCode));
   }
-}
+};

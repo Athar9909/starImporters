@@ -30,6 +30,7 @@ const {
   editUserProfile,
   usersCount,
   allUsersList,
+  searchUser,
 } = require("../controllers/adminController/userManagement");
 
 const {
@@ -123,6 +124,8 @@ router.post(
 );
 
 router.post("/editUserProfile/:_id", upload.any(), editUserProfile);
+
+router.get("/searchUser",  searchUser);
 
 // Content Management
 

@@ -10,11 +10,13 @@ require("./config/conn");
 
 const port = process.env.PORT || 7000;
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
 app.use(compression());
+app.use(express.static('./public'));
 
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");

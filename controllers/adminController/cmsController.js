@@ -27,7 +27,9 @@ exports.addSlide = async (req, res) => {
   try {
     const counter = (await HomeBanner.find().count()) + 1;
     // console.log(counter);
-    const banner = req.files[0].path;
+    const arr = req.files[0].path.split("\\");
+    const banner = `${arr[1]}\\${arr[2]}`;
+    // const banner = req.files[0].path
     const add = new HomeBanner({
       slide: `Slide${counter}`,
       title: title,
@@ -53,11 +55,14 @@ exports.editSlide = async (req, res) => {
     if (title) edit.title = title;
     if (description) edit.description = description;
     if (req.files.length > 0) {
-      edit.banner = `${req.files[0].destination.replace("/public/images")}/${
-        req.files[0].filename
-      }`;
+      const arr = req.files[0].path.split("\\");
+      const banner = `${arr[1]}\\${arr[2]}`;
+      edit.banner = banner;
     }
-    await edit.save();
+    // console.log(`${req.files[0].destination.replace("/public/images")}/${
+    //   req.files[0].filename
+    // }`);
+    // await edit.save();
     res
       .status(201)
       .json(success(res.statusCode, "Slide Modified Successfully", edit));
@@ -158,7 +163,9 @@ exports.addTnC = async (req, res) => {
   if (!description) {
     return res
       .status(201)
-      .json(error(`Please provide "Terms and Conditions" content`, res.statusCode));
+      .json(
+        error(`Please provide "Terms and Conditions" content`, res.statusCode)
+      );
   }
   try {
     const add = new TermsAndConditions({
@@ -167,10 +174,18 @@ exports.addTnC = async (req, res) => {
     const added = await add.save();
     res
       .status(201)
-      .json(success(res.statusCode, `"Terms and Conditions" added successfully`, added));
+      .json(
+        success(
+          res.statusCode,
+          `"Terms and Conditions" added successfully`,
+          added
+        )
+      );
   } catch (err) {
     console.log(err);
-    res.status(401).json(error(`Error in adding "Terms and Conditions"`, res.statusCode));
+    res
+      .status(401)
+      .json(error(`Error in adding "Terms and Conditions"`, res.statusCode));
   }
 };
 
@@ -180,7 +195,9 @@ exports.editTnC = async (req, res) => {
   if (!description) {
     return res
       .status(201)
-      .json(error(`Please provide "Terms and Conditions" content`, res.statusCode));
+      .json(
+        error(`Please provide "Terms and Conditions" content`, res.statusCode)
+      );
   }
   try {
     const edit = await TermsAndConditions.findOne({ title: "TnC" });
@@ -189,7 +206,13 @@ exports.editTnC = async (req, res) => {
     await edit.save();
     res
       .status(201)
-      .json(success(res.statusCode, `"Terms and Conditions" Modified Successfully`, edit));
+      .json(
+        success(
+          res.statusCode,
+          `"Terms and Conditions" Modified Successfully`,
+          edit
+        )
+      );
   } catch (err) {
     console.log(err);
     res.status(401).json(error(`Error -> "Terms and Conditions"`));
@@ -250,7 +273,9 @@ exports.editPrivacyPolicy = async (req, res) => {
     await edit.save();
     res
       .status(201)
-      .json(success(res.statusCode, `"Privacy Policy" Modified Successfully`, edit));
+      .json(
+        success(res.statusCode, `"Privacy Policy" Modified Successfully`, edit)
+      );
   } catch (err) {
     console.log(err);
     res.status(401).json(error(`Error -> "Privacy Policy"`));

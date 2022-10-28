@@ -22,7 +22,8 @@ exports.addCategory = async (req, res) => {
       categoryName: categoryName,
     });
     if (req.files.length > 0) {
-      const categoryImage = req.files[0].path;
+      const arr = req.files[0].path.split("\\");
+      const categoryImage = `${arr[1]}\\${arr[2]}`;
       category.categoryImage = categoryImage;
     }
     await category.save();
@@ -36,16 +37,18 @@ exports.addCategory = async (req, res) => {
 // Edit Category
 exports.editCategory = async (req, res) => {
   const { categoryName } = req.body;
+  console.log(req.files);
   try {
     const editCategory = await Category.findById(req.params._id);
     if (categoryName) {
       editCategory.categoryName = categoryName;
     }
     if (req.files.length > 0) {
-      if (req.files[0].fieldname == "image") {
-        editCategory.categoryName = `${req.files[0].destination.replace(
-          "./public/images"
-        )}/${req.files[0].filename}`;
+      if (req.files[0].fieldname == "categoryImage") {
+        const arr = req.files[0].path.split("\\");
+        // console.log(arr);
+        const categoryImage = `${arr[1]}\\${arr[2]}`;
+        editCategory.categoryImage = categoryImage;
       }
     }
     await editCategory.save();
@@ -123,7 +126,8 @@ exports.addSubCategory = async (req, res) => {
       subCategoryName: subCategoryName,
     });
     if (req.files.length > 0) {
-      const subCategoryImage = req.files[0].path;
+      const arr = req.files[0].path.split("\\");
+      const subCategoryImage = `${arr[1]}\\${arr[2]}`;
       subCategory.subCategoryImage = subCategoryImage;
     }
     await subCategory.save();
@@ -147,9 +151,9 @@ exports.editSubCategory = async (req, res) => {
       edit.subCategoryName = subCategoryName;
     }
     if (req.files.length > 0) {
-      edit.subCategoryImage = `${req.files[0].destination.replace(
-        "/public/images"
-      )}/${req.files[0].filename}`;
+      const arr = req.files[0].path.split("\\");
+      const subCategoryImage = `${arr[1]}\\${arr[2]}`;
+      edit.subCategoryImage = subCategoryImage;
     }
     await edit.save();
     res
