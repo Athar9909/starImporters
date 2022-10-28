@@ -116,23 +116,18 @@ exports.rejectUser = async (req, res) => {
 
 // Suspend or Resume User -> Admin
 exports.userStatus = async (req, res) => {
-  const { status } = req.body;
-  if (!status) {
-    return res
-      .status(201)
-      .json(error("Please provide new status", res.statusCode));
-  }
   try {
     const user = await NewStarUser.findById(req.params._id).select("status");
-    user.status = status;
-    await user.save();
-    // console.log(user);
-    if (user.status == true) {
+    if (user.status == false) {
+      user.status = true;
+      await user.save();
       return res
         .status(201)
         .json(success(res.statusCode, `User enabled successfully`, user));
     }
-    if (user.status == false) {
+    if (user.status == true) {
+      user.status = false;
+      await user.save();
       return res
         .status(201)
         .json(success(res.statusCode, `User disabled successfully`, user));
@@ -178,22 +173,29 @@ exports.importUsers = async (req, res) => {
       });
     });
     try {
-      const importedData = await NewStarUser.create(jsonArray,function(err,results){
-        if(err){
-          console.log(err);
-          return res.status(201).json(error("Validation Failed",res.statusCode))
+      const importedData = await NewStarUser.create(
+        jsonArray,
+        function (err, results) {
+          if (err) {
+            console.log(err);
+            return res
+              .status(201)
+              .json(error("Validation Failed", res.statusCode));
+          }
+          res.status(201).json(
+            success(res.statusCode, "Successfully Imported", {
+              results,
+              userNameAndPassword,
+            })
+          );
         }
-        res.status(201).json(
-          success(res.statusCode, "Successfully Imported", {
-            results,
-            userNameAndPassword,
-          })
-        );
-      });
+      );
       // console.log(importedData);
     } catch (err) {
       console.log(err);
-      res.status(401).json(error("Something went wrong in Importing", res.statusCode));
+      res
+        .status(401)
+        .json(error("Something went wrong in Importing", res.statusCode));
     }
   } catch (err) {
     console.log(err);
@@ -336,7 +338,7 @@ exports.editUserProfile = async (req, res) => {
       email,
       phoneNumber,
       quotation,
-      heardAboutUs
+      heardAboutUs,
     } = req.body;
 
     // console.log(req.body);

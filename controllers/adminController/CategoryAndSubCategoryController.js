@@ -169,6 +169,9 @@ exports.getSubCategories = async (req, res) => {
     const subCategories = await Sub_Category.find().populate("categoryName");
     // const nnn = subCategories._id
     // console.log();
+    // for (const iterator of subCategories) {
+    //   console.log(iterator.categoryName.categoryName);
+    // }
     res
       .status(201)
       .json(success(res.statusCode, "Sub Categories", subCategories));
