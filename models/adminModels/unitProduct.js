@@ -4,22 +4,24 @@ const unitProductSchema = mongoose.Schema(
   {
     unitName: {
       type: String,
-      // required: true,
+      required: true,
     },
     description: {
       type: String,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"Category",
       required: true,
     },
     subCategory: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"Sub_Category",
+      required: true
     },
     brand: {
       type: String,
-      required: true,
+      // required: true,
     },
     quantity: {
       type: Number,

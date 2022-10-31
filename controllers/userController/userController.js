@@ -365,3 +365,18 @@ exports.editProfile = async (req, res) => {
     res.status(401).json(error("Error while profile updation"));
   }
 };
+
+
+// Get user 
+exports.getUserProfile = async(req,res)=>{
+  try {
+    if(!req.user._id){
+      return res.status(201).json(error("User not logged in",res.statusCode))
+    }
+    const getUser = await NewStarUser.findById(req.user._id)
+    res.status(201).json(success(res.statusCode,"User",getUser))
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(error("Error in fetching",res.statusCode))
+  }
+}

@@ -31,6 +31,7 @@ const {
   usersCount,
   allUsersList,
   searchUser,
+  generatePassword,
 } = require("../controllers/adminController/userManagement");
 
 const {
@@ -123,9 +124,12 @@ router.post(
   addUser
 );
 
-router.post("/editUserProfile/:_id", upload.any(), editUserProfile);
+router.post("/editUserProfile/:_id",tokenAdminAuthorisation, upload.any(), editUserProfile);
 
-router.get("/searchUser",  searchUser);
+router.get("/searchUser",tokenAdminAuthorisation,  searchUser);
+
+// router.post("/generatePassword/:_id",generatePassword)
+
 
 // Content Management
 

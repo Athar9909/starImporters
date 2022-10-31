@@ -36,7 +36,6 @@ exports.addSlide = async (req, res) => {
       description: description,
       banner: banner,
     });
-    // add.$inc("slideNum",1)
     await add.save();
     res
       .status(201)
@@ -55,14 +54,16 @@ exports.editSlide = async (req, res) => {
     if (title) edit.title = title;
     if (description) edit.description = description;
     if (req.files.length > 0) {
-      const arr = req.files[0].path.split("\\");
-      const banner = `${arr[1]}\\${arr[2]}`;
-      edit.banner = banner;
+      if (req.files[0].fieldname == "banner") {
+        const arr = req.files[0].path.split("\\");
+        const banner = `${arr[1]}\\${arr[2]}`;
+        edit.banner = banner;
+      }
     }
     // console.log(`${req.files[0].destination.replace("/public/images")}/${
     //   req.files[0].filename
     // }`);
-    // await edit.save();
+    await edit.save();
     res
       .status(201)
       .json(success(res.statusCode, "Slide Modified Successfully", edit));

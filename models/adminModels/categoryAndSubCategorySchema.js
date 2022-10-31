@@ -3,7 +3,8 @@ const mongoose = require("mongoose")
 const categorySchema = mongoose.Schema({
     categoryName:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     categoryImage:{
         type:String
@@ -25,6 +26,7 @@ const subCategorySchema = mongoose.Schema({
     },
     subCategoryName:{
         type:String,
+        unique:true,
         required:true
     },
     subCategoryImage:{

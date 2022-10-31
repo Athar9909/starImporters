@@ -18,6 +18,10 @@ exports.addCategory = async (req, res) => {
         .status(201)
         .json(error("Please provide category Image", res.statusCode));
     }
+    const verifyCategory = await Category.findOne({categoryName:categoryName})
+    if(verifyCategory){
+      return res.status(201).json(error("Category is already added",res.statusCode))
+    }
     const category = new Category({
       categoryName: categoryName,
     });
@@ -120,6 +124,10 @@ exports.addSubCategory = async (req, res) => {
       return res
         .status(201)
         .json(error("Please provide Sub category Image", res.statusCode));
+    }
+    const verifySubcategory = await Sub_Category.findOne({subCategoryName:subCategoryName})
+    if(verifySubcategory){
+      return res.status(201).json(error("Sub Category is already exist",verifySubcategory))
     }
     const subCategory = new Sub_Category({
       categoryName: categoryName,

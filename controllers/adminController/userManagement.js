@@ -456,3 +456,19 @@ exports.searchUser = async (req, res) => {
     res.status(401).json(error("Error in search", res.statusCode));
   }
 };
+
+
+
+//! Generate Random password to user
+exports.generatePassword = async (req,res)=>{
+  try {
+    const password = Math.floor(10000+(Math.random()*90000))
+    const newPass = await NewStarUser.findById(req.params._id)
+    newPass.password = password;
+    await newPass.save()
+    res.status(201).json(success(res.statusCode,"password Generated",password))
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(error("Error -> Random Password Generation",res.statusCode))
+  }
+}

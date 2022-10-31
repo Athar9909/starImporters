@@ -14,6 +14,7 @@ const {
   contact,
   updateAddress,
   editProfile,
+  getUserProfile,
 } = require("../controllers/userController/userController");
 const {
   addToCart,
@@ -47,6 +48,8 @@ router.post("/changePassword", tokenAuthorisationUser, changePassword);
 router.post("/updateAddress", tokenAuthorisationUser, updateAddress);
 
 router.post("/editProfile", tokenAuthorisationUser, upload.any(), editProfile);
+
+router.get("/getUserProfile", tokenAuthorisationUser, getUserProfile);
 
 // router.post("/logout", logout)
 
